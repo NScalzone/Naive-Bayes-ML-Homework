@@ -1,6 +1,8 @@
 from data_processing import *
 import math
 
+PCLASS_SPAM = 0.4
+PCLASS_NOT_SPAM = 0.6
 TRAINING_DATA = "/Users/nicholasscalzone/Documents/COMPUTER SCIENCE CLASSES/Machine Learning/Naive-Bayes-ML-Homework/spambase/spambase_train.csv"
 TESTING_DATA = "/Users/nicholasscalzone/Documents/COMPUTER SCIENCE CLASSES/Machine Learning/Naive-Bayes-ML-Homework/spambase/spambase_test.csv"
 
@@ -60,3 +62,13 @@ not_spam_std_dev = get_std_dev(not_spam_set,not_spam_means)
 print(f"spam means is: {spam_means}\n\nnot spam means is: {not_spam_means}\n")
     
 print(f"spam std dev is: {spam_std_dev}\n\nnot spam std dev is: {not_spam_std_dev}\n")
+
+def naive_bayes_probability(x:float, mean:float, std_dev:float)->float:
+    return_val = (1/(math.sqrt(2*math.pi)*std_dev))*math.exp(-1* (((x - mean)**2)/(2*std_dev**2)))
+    return return_val
+
+def classification(p_class:float, means:List[float], std_devs:List[float], data:List[float])->float:
+    total_prob = math.log(p_class)
+    for i in range(len(data)-1):
+        total_prob += math.log(naive_bayes_probability(data[i], means[i],std_devs[i]))
+    return total_prob
