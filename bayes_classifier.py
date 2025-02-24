@@ -109,12 +109,17 @@ total_not_spam_emails = len(test_set)-total_spam_emails
 # print(f"Success on non-spam emails is: {100*(correct_not_spam_results/(total_not_spam_emails))}%")
 # print(f"Total size of test set is: {len(test_set)}")
 
-spam_precision = round((100*(correct_spam_results/total_spam_emails)),1)
-not_spam_precision = round((100*(correct_not_spam_results/(total_not_spam_emails))),1)
+spam_recall = round((100*(correct_spam_results/total_spam_emails)),1)
+not_spam_recall = round((100*(correct_not_spam_results/(total_not_spam_emails))),1)
 
-print(f"\n\t\tConfusion Matrix:\nEmail Identified as:\tSpam\tNot-Spam\tPrecision")
-print(f"Spam\t\t\t{confusion_matrix[0][0]}\t{confusion_matrix[0][1]}\t\t{confusion_matrix[0][0]} out of {total_spam_emails}, {spam_precision}%")
-print(f"Not-Spam\t\t{confusion_matrix[1][0]}\t{confusion_matrix[1][1]}\t\t{confusion_matrix[1][1]} out of {total_not_spam_emails}, {not_spam_precision}%\n")
+spam_precision = round((100*(correct_spam_results/(correct_spam_results+confusion_matrix[1][0]))),1)
+spam_precision_readout = f"{correct_spam_results} out of {correct_spam_results+confusion_matrix[1][0]}, {spam_precision}%"
+not_spam_precision = round((100*(correct_not_spam_results/(correct_not_spam_results+confusion_matrix[0][1]))),1)
+not_spam_precision_readout = f"{correct_not_spam_results} out of {correct_not_spam_results+confusion_matrix[0][1]}, {not_spam_precision}%"
+
+print(f"\n\t\tConfusion Matrix:\nEmail Identified as:\tSpam\tNot-Spam\tRecall\t\t\tPrecision")
+print(f"Spam\t\t\t{confusion_matrix[0][0]}\t{confusion_matrix[0][1]}\t\t{confusion_matrix[0][0]} out of {total_spam_emails}, {spam_recall}%\t{spam_precision_readout}")
+print(f"Not-Spam\t\t{confusion_matrix[1][0]}\t{confusion_matrix[1][1]}\t\t{confusion_matrix[1][1]} out of {total_not_spam_emails}, {not_spam_recall}%\t{not_spam_precision_readout}\n")
 
 print(f"Accuracy: Of {len(test_set)} total emails, {correct_spam_results+correct_not_spam_results} were correctly identified")
 print(f"This is {round((100*(correct_spam_results+correct_not_spam_results)/(len(test_set))),1)}% Accuracy\n\n")
